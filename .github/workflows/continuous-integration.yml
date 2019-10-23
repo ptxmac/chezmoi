@@ -1,5 +1,8 @@
 on:
-- push
+  pull_request:
+  push:
+  schedule:
+  - cron: "45 17 * * *"
 name: continuous-integration
 jobs:
   Ubuntu:
