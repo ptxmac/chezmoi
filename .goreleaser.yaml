@@ -110,7 +110,7 @@ nfpms:
     "completions/chezmoi.fish": "/usr/share/fish/completions/chezmoi.fish"
   overrides:
     rpm:
-      name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Env.TRAVIS_BUILD_NUMBER }}-{{ .Arch }}"
+      name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Env.BUILD_NUMBER }}-{{ .Arch }}"
       replacements:
         amd64: x86_64
         386: i686

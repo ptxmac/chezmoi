@@ -76,7 +76,7 @@ release-setup-travis:
 
 .PHONY: test-release
 test-release:
-	TRAVIS_BUILD_NUMBER=1 goreleaser release \
+	BUILD_NUMBER=1 goreleaser release \
 		--rm-dist \
 		--skip-publish \
 		--snapshot \
