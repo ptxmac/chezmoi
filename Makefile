@@ -26,7 +26,7 @@ completions/chezmoi.zsh:
 
 .PHONY: coverage.out
 coverage.out:
-	go test -cover -covermode=count -coverprofile=cmd-coverage.out -coverpkg=github.com/twpayne/chezmoi/cmd,github.com/twpayne/chezmoi/internal/chezmoi ./cmd
+	go test -cover -covermode=count -coverprofile=cmd-coverage.out -coverpkg=github.com/twpayne/chezmoi/cmd,github.com/twpayne/chezmoi/internal/chezmoi,github.com/twpayne/chezmoi/internal/git ./cmd
 	go test -cover -covermode=count -coverprofile=internal-chezmoi-coverage.out ./internal/chezmoi
 	$$(go env GOPATH)/bin/gocovmerge cmd-coverage.out internal-chezmoi-coverage.out > $@ || ( rm -f $@ ; false )
 

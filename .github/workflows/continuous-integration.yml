@@ -23,7 +23,7 @@ jobs:
     - name: Run
       run: go run . --version
     - name: Test
-      run: go test -covermode=atomic -coverprofile=profile.cov -race ./...
+      run: go test -race ./...
     - name: Lint
       run: |
         curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- v1.21.0
@@ -46,8 +46,15 @@ jobs:
       env:
         COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        GO111MODULE=off go get github.com/mattn/goveralls
+        GO111MODULE=off go get github.com/mattn/goveralls github.com/wadey/gocovmerge
+        make coverage.out
         $(go env GOPATH)/bin/goveralls -coverprofile=profile.cov -service=github
+    - name: Setup Snapcraft
+      env:
+        SNAPCRAFT_LOGIN: ${{ secrets.SNAPCRAFT_LOGIN }}
+      run:
+        sudo snap install snapcraft --classic
+        echo ${SNAPCRAFT_LOGIN} | snapcraft login --with -
   macOS:
     runs-on: macos-latest
     steps:
