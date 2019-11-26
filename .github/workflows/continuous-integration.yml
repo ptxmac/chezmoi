@@ -1,5 +1,10 @@
 on:
-- push
+  pull_request:
+    types:
+    - opened
+    - synchronize
+    - reopened
+  push:
 name: continuous-integration
 jobs:
   Ubuntu:
@@ -18,23 +23,31 @@ jobs:
     - name: Run
       run: go run . --version
     - name: Test
-      run: go test -cover -covermode=atomic -coverprofile=coverage.out -race ./...
-    - name: Install tools
-      run: make install-tools
+      run: go test -covermode=atomic -coverprofile=profile.cov -race ./...
     - name: Lint
-      run: make lint
+      run: |
+        curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- v1.21.0
+        make lint
     - name: Check formatting
       run: |
+        GO111MODULE=off go get -u mvdan.cc/gofumpt/gofumports
         make format
         git diff --exit-code
     - name: Check generate
       run: |
+        GO111MODULE=off go get -u github.com/gobuffalo/packr/v2/packr2
         make generate
         git diff --exit-code
     - name: Check completions
       run: |
         make completions
         git diff --exit-code
+    - name: Send coverage
+      env:
+        COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        GO111MODULE=off go get github.com/mattn/goveralls
+        $(go env GOPATH)/bin/goveralls -coverprofile=profile.cov -service=github
   macOS:
     runs-on: macos-latest
     steps:
